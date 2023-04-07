@@ -2,7 +2,7 @@
 
 ## Install
 
-    go get -u github.com/766b/go-outliner
+    go install github.com/rclt2m/go-outliner
 
 ## Usage
 
