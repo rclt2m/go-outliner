@@ -48,6 +48,9 @@ func main() {
 						switch spec := s.(type) {
 						case *ast.ValueSpec:
 							for _, v := range spec.Names {
+								if !ast.IsExported(v.Name) {
+									continue
+								}
 								decls = append(decls, Declaration{
 									Label: v.Name,
 									File:  filename,
@@ -56,15 +59,31 @@ func main() {
 								})
 							}
 						case *ast.TypeSpec:
+							if !ast.IsExported(spec.Name.String()) {
+								continue
+							}
+							if _, ok := spec.Type.(*ast.InterfaceType); ok {
+								decls = append(decls, Declaration{
+									Label: spec.Name.String(),
+									File:  filename,
+									Type:  "interface",
+									Line:  fset.Position(spec.Pos()).Line,
+								})
+								continue
+							}
 							decls = append(decls, Declaration{
 								Label: spec.Name.String(),
 								File:  filename,
 								Type:  "type",
 								Line:  fset.Position(spec.Pos()).Line,
 							})
+
 						}
 					}
 				case *ast.FuncDecl:
+					if !ast.IsExported(s.Name.String()) {
+						continue
+					}
 					decls = append(decls, Declaration{
 						Label:    s.Name.String(),
 						Type:     "func",
