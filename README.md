@@ -2,7 +2,7 @@
 
 ## Install
 
-    go install github.com/rclt2m/go-outliner
+    go install github.com/rclt2m/go-outliner@latest
 
 ## Usage
 
